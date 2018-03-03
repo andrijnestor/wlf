@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 22:13:30 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/03 22:43:19 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/03 23:11:23 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 int		key_hooks(int keycode, t_wolf *data)
 {
 	if (keycode == 123)
-		data->player.a -= 5;
-	if (keycode == 124)
 		data->player.a += 5;
+	if (keycode == 124)
+		data->player.a -= 5;
 	if (keycode == 53)
 		wf_exit("Exit success");
 	printf("k: %d\n", keycode);

@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 19:37:24 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/03 20:37:48 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/03 23:37:45 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,9 @@ t_rc	hor_len(t_wolf *data, double angle)
 	else
 		i.y = (int)floor(data->player.y / CUBE) * (CUBE) + CUBE;
 	i.x = data->player.x + (data->player.y - i.y) / tan(RAD(angle));	
-//	printf("x: %d y: %d\n", i.x / CUBE, i.y / CUBE);
-
 	if ((int)floor(i.y / CUBE) < 0 || (int)floor(i.y / CUBE) > data->map.y - 1
 		|| (int)floor(i.x / CUBE) < 0 || (int)floor(i.x / CUBE) > data->map.x - 1)
 	{
-		ret.col = 0;
 		ret.len = 999;
 //		printf("y: %d x: %d a: %f i: %d l: %f\n", (int)floor(i.y / (CUBE)),
 //			(int)floor(i.x / (CUBE)), angle, 0, ret.len);
@@ -42,22 +39,19 @@ t_rc	hor_len(t_wolf *data, double angle)
 		else
 			i.y = i.y + (CUBE);
 		i.x = i.x + (CUBE) / tan(RAD(angle));
-	//		printf("x: %d y: %d\n", i.x / CUBE, i.y / CUBE);
 		if ((int)floor(i.y / CUBE) < 0 || (int)floor(i.y / CUBE) > data->map.y - 1
 			|| (int)floor(i.x / CUBE) < 0 || (int)floor(i.x / CUBE) > data->map.x - 1)
 		{
-			ret.col = 0;
 			ret.len = 999;
 //			printf("y: %d x: %d a: %f i: %d l: %f\n", (int)floor(i.y / (CUBE)),
 //				(int)floor(i.x / (CUBE)), angle, 0, ret.len);
 			return (ret);
 		}
 		index = data->map.arr[(int)floor(i.y / (CUBE))][(int)floor(i.x / (CUBE))];
-
 	}
 	ret.col = data->map.col[index - 1];
 	ret.len = sqrt(pow(data->player.x - i.x, 2) + pow(data->player.y - i.y, 2)); //cos
-	ret.len = ret.len * cos(RAD(angle));
+//	ret.len = ret.len * cos(RAD((angle - data->player.a)));
 	printf("  y: %d x: %d a: %f i: %d l: %f\n", (int)floor(i.y / (CUBE)),
 		(int)floor(i.x / (CUBE)), angle, ret.col, ret.len);
 	return (ret);
@@ -74,41 +68,35 @@ t_rc	ver_len(t_wolf *data, double angle)
 	else
 		i.x = (int)floor(data->player.x / CUBE) * (CUBE) - 1;
 	i.y = data->player.y + (data->player.x - i.x) * tan(RAD(angle));
-//	printf("x: %d y: %d\n", i.x / CUBE, i.y / CUBE);
 	if ((int)floor(i.y / CUBE) < 0 || (int)floor(i.y / CUBE) > data->map.y - 1
 		|| (int)floor(i.x / CUBE) < 0 || (int)floor(i.x / CUBE) > data->map.x - 1)
 	{
-		ret.col = 0;
 		ret.len = 999;
 //		printf("y: %d x: %d a: %f i: %d l: %f\n", (int)floor(i.y / (CUBE)),
 //			(int)floor(i.x / (CUBE)), angle, 0, ret.len);
 		return (ret);
 	}
-	index = data->map.arr[(int)floor(i.y / (CUBE))][(int)floor(i.x / (CUBE))];
-			
+	index = data->map.arr[(int)floor(i.y / (CUBE))][(int)floor(i.x / (CUBE))];		
 	while (index == 0)
 	{
 		if (angle < 90 || angle > 270)
-			i.x = i.x + +(CUBE);
+			i.x = i.x + (CUBE);
 		else
 			i.x = i.x + -(CUBE);
 		i.y = i.y - (CUBE) * tan(RAD(angle));
-//		printf("x: %d y: %d\n", i.x / CUBE, i.y / CUBE);
 		if ((int)floor(i.y / CUBE) < 0 || (int)floor(i.y / CUBE) > data->map.y - 1
 			|| (int)floor(i.x / CUBE) < 0 || (int)floor(i.x / CUBE) > data->map.x - 1)
 		{
-			ret.col = 0;
 			ret.len = 999;
 //			printf("y: %d x: %d a: %f i: %d l: %f\n", (int)floor(i.y / (CUBE)),
 //				(int)floor(i.x / (CUBE)), angle, 0, ret.len);
 			return (ret);
 		}
 		index = data->map.arr[(int)floor(i.y / (CUBE))][(int)floor(i.x / (CUBE))];
-
 	}
 	ret.col = data->map.col[index - 1];
 	ret.len = sqrt(pow(data->player.x - i.x, 2) + pow(data->player.y - i.y, 2)); //cos
-	ret.len = ret.len * cos(RAD(angle));
+//	ret.len = ret.len * cos(RAD((angle - data->player.a)));
 	printf("v y: %d x: %d a: %f i: %d l: %f\n", (int)floor(i.y / (CUBE)),
 			(int)floor(i.x / (CUBE)), angle, ret.col, ret.len);
 	return (ret);
@@ -137,7 +125,6 @@ void	ray_casting(t_wolf *data)
 		angle += (double)PP_ANGLE / WIN_W;
 		angle = fmod(angle + 360, 360);
 		printf("                      %f %d %f\n", angle, data->slice[n].col, data->slice[n].len);
-		printf("start: %d\n", data->slice[n].start);
 		n++;
 	}
 }

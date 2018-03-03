@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 22:44:10 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/03 22:44:30 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/03 23:37:38 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	put_walls_img(t_wolf *data)
 		i.y = 0;
 		while (i.y != WIN_H)
 		{
-			if (data->slice[i.x].start <= i.y && data->slice[i.x].end >= i.y)
+			if (data->slice[WIN_W - 1 - i.x].start <= i.y && data->slice[WIN_W - 1 - i.x].end >= i.y)
 				*(int *)(data->walls.addr + ((i.x + i.y * WIN_W) * sizeof(int)))
-					= data->slice[i.x].col;
+					= data->slice[WIN_W - 1 - i.x].col;
 			else
 				*(int *)(data->walls.addr + ((i.x + i.y * WIN_W) * sizeof(int)))
 					= 255 << 24;

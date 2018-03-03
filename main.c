@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:11:19 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/03 22:45:15 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/03 23:37:36 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	wolf_init(t_wolf *data)
 {
 	data->mlx = mlx_init();
 	data->win = mlx_new_window(data->mlx, WIN_W, WIN_H, "wolf3d");
-	data->player.x = 140;
-	data->player.y = 140;
-	data->player.a = 15;
+	data->player.x = 200;
+	data->player.y = 200;
+	data->player.a = 0;
 	data->pp_a = PP_ANGLE / WIN_W;
 	data->pp_d = (WIN_W / 2) / tan(RAD(PP_ANGLE / 2));
 }
