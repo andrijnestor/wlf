@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:26:58 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/02 19:35:58 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/03 22:23:52 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ static int	read_colors(t_wolf *data, int fd)
 			return (-1);
 		if (line == NULL)
 			wf_exit("Map error");
-	//	data->map.col[i] = ft_atoi_base(line, 16);
-	//	data->map.col[i] = ft_atoi(line);
-		data->map.col[i] = i;
+		data->map.col[i] = ft_atoi_base(line, 16);
 		ft_memdel((void **)&line);
 		i++;
 	}
@@ -47,7 +45,9 @@ static int	read_map(t_wolf *data, int fd)
 	while (i != data->map.y)
 	{
 		get_next_line(fd, &line);
-		(line == NULL) ? wf_exit("Map error") : (arr = ft_strsplit(line, ' '));
+		if (line == NULL)
+			wf_exit("Map error");
+		arr = ft_strsplit(line, ' ');
 		ft_memdel((void **)&line);
 		data->map.arr[i] = ft_memalloc(sizeof(int) * data->map.x);
 		j = 0;

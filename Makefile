@@ -6,7 +6,7 @@
 #    By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/09 19:34:27 by anestor           #+#    #+#              #
-#    Updated: 2018/03/02 16:06:54 by anestor          ###   ########.fr        #
+#    Updated: 2018/03/03 22:44:53 by anestor          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,9 @@ EXT					= wolf.h
 SRC					=
 SRC					+= main.c
 SRC					+= read_file.c
+SRC					+= ray_casting.c
+SRC					+= key_hooks.c
+SRC					+= render.c
 
 OBJ					= $(patsubst %.c,$(OBJ_DIR)%.o,$(SRC))
 .SILENT:
