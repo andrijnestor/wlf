@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:09:15 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/03 22:31:53 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/04 19:42:10 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@
 # include <math.h>
 # include <mlx.h>
 # include <stdio.h> // 
-# define WIN_H 1000
-# define WIN_W 1600
+# define WIN_H 800
+# define WIN_W 1200
 # define TOP_COLOR 0xAAAAFF
 # define BOT_COLOR 0x222222
 # define PP_ANGLE 60
 # define CUBE 64
 # define RAD(x) (x * M_PI / 180.0)
 # define DEG(x) (x * 180.0 / M_PI)
+# define ABS(x) (x < 0) ? x * -1 : x
 
 typedef struct	s_xy
 {

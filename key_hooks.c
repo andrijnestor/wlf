@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 22:13:30 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/03 23:11:23 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/04 18:42:32 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,18 @@ int		key_hooks(int keycode, t_wolf *data)
 		data->player.a += 5;
 	if (keycode == 124)
 		data->player.a -= 5;
+	if (data->player.a < 0 || data->player.a > 360)
+		data->player.a = fmod(data->player.a + 360, 360);
+	if (keycode == 126)
+	{
+		data->player.x = data->player.x + cos(data->player.a) * 10;
+		data->player.y = data->player.y + sin(data->player.a) * 10;
+	}
+	if (keycode == 125)
+	{
+		data->player.x = data->player.x - cos(data->player.a) * 10;
+		data->player.y = data->player.y - sin(data->player.a) * 10;
+	}
 	if (keycode == 53)
 		wf_exit("Exit success");
 	printf("k: %d\n", keycode);
