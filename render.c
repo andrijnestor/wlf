@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 22:44:10 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/04 16:14:32 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/06 18:49:47 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,19 @@ void	put_walls_img(t_wolf *data)
 {
 	t_xy	i;
 
-	data->walls.image = mlx_new_image(data->mlx, WIN_W, WIN_H);
-	data->walls.addr = mlx_get_data_addr(data->walls.image, &data->walls.bpp,
-			&data->walls.size_line, &data->walls.endian);
-	data->walls.bpp /= 8;
+//	data->walls.image = mlx_new_image(data->mlx, WIN_W, WIN_H);
+//	data->walls.addr = mlx_get_data_addr(data->walls.image, &data->walls.bpp,
+//			&data->walls.size_line, &data->walls.endian);
+//	data->walls.bpp /= 8;
 	i.x = 0;
 	while (i.x != WIN_W)
 	{
 		i.y = 0;
 		while (i.y != WIN_H)
 		{
-			if (data->slice[(int)(WIN_W - 1 - i.x)].start <= i.y && data->slice[(int)(WIN_W - 1 - i.x)].end >= i.y)
+			if (data->slice[(int)(i.x)].start <= i.y && data->slice[(int)(i.x)].end >= i.y)
 				*(int *)(data->walls.addr + ((int)((i.x + i.y * WIN_W)) * sizeof(int)))
-					= data->slice[(int)(WIN_W - 1 - i.x)].col;
+					= data->slice[(int)(i.x)].col;
 			else
 				*(int *)(data->walls.addr + (((int)(i.x + i.y * WIN_W)) * sizeof(int)))
 					= 255 << 24;

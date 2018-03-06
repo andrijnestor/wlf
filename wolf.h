@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:09:15 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/06 13:17:04 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/06 21:55:45 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,16 @@
 # include <stdio.h> // 
 # define WIN_H 800
 # define WIN_W 1200
-# define TOP_COLOR 0xAAAAFF
-# define BOT_COLOR 0x222222
-# define PP_ANGLE 60
-# define CUBE 64
-# define RAD(x) (x * M_PI / 180.0)
-# define DEG(x) (x * 180.0 / M_PI)
+# define TEX_H 64
+# define TEX_W 64
+# define TOP_COLOR 0x222222
+# define BOT_COLOR 0x444444
+# define ROT_SPD 0.2
+# define SPD 0.15
+//# define PP_ANGLE 60
+//# define CUBE 64
+//# define RAD(x) (x * M_PI / 180.0)
+//# define DEG(x) (x * 180.0 / M_PI)
 # define ABS(x) (x < 0) ? x * -1 : x
 # define POX data->player.x
 # define POY data->player.y
@@ -70,7 +74,7 @@ typedef struct	s_plr
 	double		dir_y;
 	double		plane_x;
 	double		plane_y;
-	double		a; ///
+//	double		a; ///
 	double		rot;
 	double		spd;
 }				t_plr;
@@ -87,8 +91,9 @@ typedef struct	s_img
 typedef struct	s_map
 {
 	int			**arr;
-	int			*col;
-	int			col_n;
+	int			***tex;
+	int			tex_n;
+	int			tex_x;
 	int			x;
 	int			y;
 }				t_map;
@@ -103,8 +108,9 @@ typedef struct	s_wolf
 	t_plr		player;
 	t_cast		cast;
 	t_rc		slice[WIN_W];
-	double		pp_a; /// 
-	int			pp_d; /// 
+//	int			*texture[TEX_H][TEX_W];
+//	double		pp_a; /// 
+//	int			pp_d; /// 
 }				t_wolf;
 
 int				wf_exit(void *msg);

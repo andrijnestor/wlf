@@ -6,55 +6,85 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 22:13:30 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/06 12:27:55 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/06 19:15:50 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-int		key_hooks(int keycode, t_wolf *data)
+static void	key_left(t_wolf *data)
+{
+	double tmp;
+
+	tmp = PDIR_X;
+	PDIR_X = PDIR_X * cos(ROT_SPD) - PDIR_Y * sin(ROT_SPD);
+	PDIR_Y = tmp * sin(ROT_SPD) + PDIR_Y * cos(ROT_SPD);
+	tmp = PLANE_X;
+	PLANE_X = PLANE_X * cos(ROT_SPD) - PLANE_Y * sin(ROT_SPD);
+	PLANE_Y = tmp * sin(ROT_SPD) + PLANE_Y * cos(ROT_SPD);
+}
+
+static void	key_right(t_wolf *data)
+{
+	double tmp;
+
+	tmp = PDIR_X;
+	PDIR_X = PDIR_X * cos(-ROT_SPD) - PDIR_Y * sin(-ROT_SPD);
+	PDIR_Y = tmp * sin(-ROT_SPD) + PDIR_Y * cos(-ROT_SPD);
+	tmp = PLANE_X;
+	PLANE_X = PLANE_X * cos(-ROT_SPD) - PLANE_Y * sin(-ROT_SPD);
+	PLANE_Y = tmp * sin(-ROT_SPD) + PLANE_Y * cos(-ROT_SPD);
+}
+
+static void	key_up(t_wolf *data)
+{
+	t_xy	i;
+
+	i.x = POX;
+	i.y = POY + PDIR_Y * SPD;
+	if (i.y < data->map.y && i.y >= 0 && i.x < data->map.x && i.x >= 0)
+		if (data->map.arr[i.y][i.x] == 0)
+			POY += PDIR_Y * SPD;
+	i.x = POX + PDIR_X * SPD;
+	i.y = POY;
+	if (i.y < data->map.y && i.y >= 0 && i.x < data->map.x && i.x >= 0)
+		if (data->map.arr[i.y][i.x] == 0)
+			POX += PDIR_X * SPD;
+}
+
+static void	key_down(t_wolf *data)
+{
+	t_xy	i;
+
+	i.x = POX;
+	i.y = POY - PDIR_Y * SPD;
+	if (i.y < data->map.y && i.y >= 0 && i.x < data->map.x && i.x >= 0)
+		if (data->map.arr[i.y][i.x] == 0)
+			POY -= PDIR_Y * SPD;
+	i.x = POX - PDIR_X * SPD;
+	i.y = POY;
+	if (i.y < data->map.y && i.y >= 0 && i.x < data->map.x && i.x >= 0)
+		if (data->map.arr[i.y][i.x] == 0)
+			POX -= PDIR_X * SPD;
+
+}
+
+int			key_hooks(int keycode, t_wolf *data)
 {
 	printf("k: %d\n", keycode);
-	double	old;
-
-	if (keycode == 124)
-	{
-		old = data->player.dir_x;
-		data->player.dir_x = data->player.dir_x * cos(-data->player.rot) - data->player.dir_y * sin(-data->player.rot);
-		data->player.dir_y = old * sin(-data->player.rot) + data->player.dir_y * cos(-data->player.rot);
-		old = data->player.plane_x;
-		data->player.plane_x = data->player.plane_x * cos(-data->player.rot) - data->player.plane_y * sin(-data->player.rot);
-		data->player.plane_y = old * sin(-data->player.rot) + data->player.plane_y * cos(-data->player.rot);
-//		data->player.a += 5;
-	}
 	if (keycode == 123)
-	{
-//		data->player.a -= 5;
-	}
-//	if (data->player.a < 0 || data->player.a > 360)
-//		data->player.a = fmod(data->player.a + 360, 360);
-	if (keycode == 126)
-	{
-		if (data->map.arr[(int)(data->player.x - data->player.dir_x * data->player.spd)][(int)data->player.y]
-				== 0)
-			data->player.x += data->player.dir_x * data->player.spd;
-		if (data->map.arr[(int)(data->player.x)][(int)(data->player.y - data->player.dir_y * data->player.spd)]
-				== 0)
-			data->player.y += data->player.dir_y * data->player.spd;
-
-	//	data->player.x = data->player.x + cos(data->player.a) * 10;
-	//	data->player.y = data->player.y + sin(data->player.a) * 10;
-	}
+		key_right(data);
+	if (keycode == 124)
+		key_left(data);
 	if (keycode == 125)
-	{
-	//	data->player.x = data->player.x - cos(data->player.a) * 10;
-	//	data->player.y = data->player.y - sin(data->player.a) * 10;
-	}
+		key_down(data);
+	if (keycode == 126)
+		key_up(data);
 	if (keycode == 53)
 		wf_exit("Exit success");
 //	mlx_destroy_image(data->mlx, data->walls.image);
-	put_back_img(data);
+//	put_back_img(data);
 	ray_casting(data);
-	put_walls_img(data);
+//	put_walls_img(data);
 	return (0);
 }

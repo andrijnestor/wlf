@@ -6,27 +6,81 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:26:58 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/03 22:23:52 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/06 20:08:56 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-static int	read_colors(t_wolf *data, int fd)
+static int	**texture_array(char *filename, t_wolf *data)
+{
+	t_img	tmp;
+	t_xy	i;
+	int		**img;
+
+	i.x = TEX_W;
+	i.y = TEX_H;
+	tmp.image = mlx_xpm_file_to_image(data->mlx, filename, &i.x, &i.y);
+	mlx_put_image_to_window(data->mlx, data->win, tmp.image, 0, 0);
+	tmp.addr = mlx_get_data_addr(tmp.image, &tmp.bpp, &tmp.size_line,
+																&tmp.endian);
+	tmp.bpp /= 8;
+	img = ft_memalloc(sizeof(int *) * WIN_H);
+	i.y = -1;
+	while (++i.y != TEX_H)
+	{
+		img[i.y] = ft_memalloc(sizeof(int) * WIN_W);
+		i.x = -1;
+		while (++i.x != TEX_W)
+		{
+			img[i.y][i.x] =
+				*(int *)(tmp.addr + ((int)(i.y + i.x * TEX_W)) * sizeof(int));
+		}
+	}
+	return (img);
+}
+
+static int	read_textures(t_wolf *data, int fd)
 {
 	int		i;
+	t_xy	p;
 	char	*line;
+	int		**col;
 
-	if ((data->map.col = ft_memalloc(sizeof(int) * data->map.col_n)) == NULL)
+	if ((data->map.tex = ft_memalloc(sizeof(int **) * data->map.tex_n)) == NULL)
 		return (-1);
 	i = 0;
-	while (i != data->map.col_n)
+	while (i != data->map.tex_n)
 	{
 		if (get_next_line(fd, &line) < 0)
 			return (-1);
 		if (line == NULL)
 			wf_exit("Map error");
-		data->map.col[i] = ft_atoi_base(line, 16);
+		data->map.tex[i] = ft_memalloc(sizeof(int *) * TEX_H);
+		if (ft_strstr(line, ".xpm"))
+		{
+			col = texture_array(line, data);
+			p.y = -1;
+			while (++p.y != TEX_W)
+			{
+				data->map.tex[i][p.y] = ft_memalloc(sizeof(int) * TEX_W);
+				p.x = -1;
+				while (++p.x != TEX_H)
+					data->map.tex[i][p.y][p.x] = col[p.y][p.x];
+			}
+		}
+		else
+		{
+			p.y = -1;
+			while (++p.y != TEX_W)
+			{
+				data->map.tex[i][p.y] = ft_memalloc(sizeof(int) * TEX_W);
+				p.x = -1;
+				while (++p.x != TEX_H)
+					data->map.tex[i][p.y][p.x] = ft_atoi_base(line, 16);
+			}
+		}
+		//	data->map.tex[i] = ft_atoi_base(line, 16);
 		ft_memdel((void **)&line);
 		i++;
 	}
@@ -83,7 +137,7 @@ static int	check_map(t_wolf *data)
 					return (-1);
 			if (data->map.arr[i][j] < 0)
 				return (-1);
-			if (data->map.arr[i][j] > data->map.col_n)
+			if (data->map.arr[i][j] > data->map.tex_n)
 				return (-1);
 			j++;
 		}
@@ -107,10 +161,10 @@ int			read_file(t_wolf *data, char *file)
 	ft_memdel((void **)&arr[0]);
 	data->map.y = ft_atoi(arr[1]);
 	ft_memdel((void **)&arr[1]);
-	data->map.col_n = ft_atoi(arr[2]);
+	data->map.tex_n = ft_atoi(arr[2]);
 	ft_memdel((void **)&arr[2]);
 	ft_memdel((void **)&arr);
-	if (read_colors(data, fd) < 0)
+	if (read_textures(data, fd) < 0)
 		wf_exit("Out of memory");
 	if (read_map(data, fd) < 0)
 		wf_exit("Out of memory");

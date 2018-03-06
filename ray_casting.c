@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 19:37:24 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/06 13:48:37 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/06 21:55:44 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,49 @@ int		calc_side_and_mapxy(t_wolf *data)
 	return (side);
 }
 
+void	put_pixels(t_wolf *data, int y, int side, double dist, int line_h)
+{
+	double	wall_x;
+	int		tex_x;
+	int		x;
+
+	if (side == 0)
+		wall_x = POY + dist * data->cast.ray.y;
+	else
+		wall_x = POX + dist * data->cast.ray.x;
+	wall_x -= floor((wall_x));
+	tex_x = (int)(wall_x * (double)TEX_W);
+	if (side == 0 && data->cast.ray.x > 0)
+		tex_x = TEX_W - tex_x - 1;
+	if (side == 1 && data->cast.ray.y < 0)
+		tex_x = TEX_W - tex_x - 1;
+	x = 0;
+	while (x != WIN_H)
+	{
+		if (data->slice[y].start <= x && data->slice[y].end > x)
+		{
+			int d = x * 256 - WIN_H * 128 + line_h * 128;
+			int	tex_y = ((d * TEX_H) / line_h) / 256;
+			int nn = (int)(data->map.arr[MPY][MPX] - 1);
+			*(int *)(data->walls.addr + ((int)((y + x * WIN_W)) * sizeof(int)))
+					= data->map.tex[nn][tex_x][tex_y];
+		}
+		else if (x <= WIN_H / 2)
+			*(int *)(data->walls.addr + ((int)((y + x * WIN_W)) * sizeof(int)))
+					= TOP_COLOR;
+		else
+			*(int *)(data->walls.addr + ((int)((y + x * WIN_W)) * sizeof(int)))
+					= BOT_COLOR;
+		x++;
+	}
+}
+
 void	ray_casting(t_wolf *data)
 {
 	int		y;
 	int		side;
-	double	dist_to_wall;
+	double	dist;
+	int		line_h;
 
 	y = -1;
 	while (++y != WIN_W)
@@ -73,18 +111,21 @@ void	ray_casting(t_wolf *data)
 		data->cast.ray.y = PDIR_Y + PLANE_Y * (2 * y / (double)WIN_W - 1);
 		MPX = (int)POX;
 		MPY = (int)POY;
-		data->cast.d_dist.x = ABS(1 / data->cast.ray.x);
-		data->cast.d_dist.y = ABS(1 / data->cast.ray.y);
+		data->cast.d_dist.x = ABS((1 / data->cast.ray.x));
+		data->cast.d_dist.y = ABS((1 / data->cast.ray.y));
 		calc_step_dist(data);
 		side = calc_side_and_mapxy(data);
 		if (side == 0)
-			dist_to_wall = (MPX - POX + (1 - data->cast.step.x) / 2) / data->cast.ray.x;
+			dist = (MPX - POX + (1 - data->cast.step.x) / 2) / data->cast.ray.x;
 		else
-			dist_to_wall = (MPY - POY + (1 - data->cast.step.y) / 2) / data->cast.ray.y;
-		data->slice[y].start = -(int)(WIN_H / dist_to_wall) / 2 + WIN_H / 2; // if <0
-		data->slice[y].end = (int)(WIN_H / dist_to_wall) / 2 + WIN_H / 2; // if > WIN_W
-		data->slice[y].col = data->map.col[data->map.arr[MPY][MPX] - 1];
-		if (side == 1)
-			data->slice[y].col = data->slice[y].col / 2;
+			dist = (MPY - POY + (1 - data->cast.step.y) / 2) / data->cast.ray.y;
+		data->slice[y].start = -(int)(WIN_H / dist) / 2 + WIN_H / 2;
+		data->slice[y].end = (int)(WIN_H / dist) / 2 + WIN_H / 2;
+		line_h = (int)(WIN_H / dist);
+//		data->slice[y].col = data->map.tex[data->map.arr[MPY][MPX] - 1][0][0];
+//		if (side == 1)
+//			data->slice[y].col = data->slice[y].col / 2;
+		put_pixels(data, y, side, dist, line_h);
 	}
+	mlx_put_image_to_window(data->mlx, data->win, data->walls.image, 0, 0);
 }
