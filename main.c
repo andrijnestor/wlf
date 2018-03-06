@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:11:19 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/06 12:28:23 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/06 13:46:34 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ void	wolf_init(t_wolf *data)
 	data->player.plane_y = 0.66;
 	data->player.rot = 0.1;
 	data->player.spd = 0.1;
-	data->player.a = 0;
-	data->pp_a = PP_ANGLE / WIN_W;
-	data->pp_d = (WIN_W / 2) / tan(RAD(PP_ANGLE / 2));
+//	data->player.a = 0;
+//	data->pp_a = PP_ANGLE / WIN_W;
+//	data->pp_d = (WIN_W / 2) / tan(RAD(PP_ANGLE / 2));
 }
 
 void	print_map(t_wolf *data)
