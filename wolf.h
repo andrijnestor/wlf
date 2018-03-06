@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:09:15 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/04 19:42:10 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/06 13:17:04 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@
 # define RAD(x) (x * M_PI / 180.0)
 # define DEG(x) (x * 180.0 / M_PI)
 # define ABS(x) (x < 0) ? x * -1 : x
+# define POX data->player.x
+# define POY data->player.y
+# define PDIR_X data->player.dir_x
+# define PDIR_Y data->player.dir_y
+# define PLANE_X data->player.plane_x
+# define PLANE_Y data->player.plane_y
+# define MPX data->cast.map.x
+# define MPY data->cast.map.y
 
 typedef struct	s_xy
 {
@@ -32,19 +40,37 @@ typedef struct	s_xy
 	int			y;
 }				t_xy;
 
+typedef struct	s_dxy
+{
+	double		x;
+	double		y;
+}				t_dxy;
+
 typedef struct	s_rc
 {
 	int			col;
-	double		len; //double?
 	int			start;
 	int			end;
 }				t_rc;
 
+typedef struct	s_cast
+{
+	t_xy		map;
+	t_xy		step;
+	t_dxy		ray;
+	t_dxy		d_dist;
+	t_dxy		s_dist;
+}				t_cast;
+
 typedef struct	s_plr
 {
-	int			x;
-	int			y;
-	double		a;
+	double		x;
+	double		y;
+	double		dir_x;
+	double		dir_y;
+	double		plane_x;
+	double		plane_y;
+	double		a; ///
 	double		rot;
 	double		spd;
 }				t_plr;
@@ -75,9 +101,10 @@ typedef struct	s_wolf
 	t_img		back;
 	t_map		map;
 	t_plr		player;
+	t_cast		cast;
 	t_rc		slice[WIN_W];
-	double		pp_a;
-	int			pp_d;
+	double		pp_a; /// 
+	int			pp_d; /// 
 }				t_wolf;
 
 int				wf_exit(void *msg);

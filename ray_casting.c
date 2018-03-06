@@ -6,134 +6,90 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 19:37:24 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/04 19:42:05 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/06 13:16:55 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-t_rc	hor_len(t_wolf *data, double angle)
-{
-	t_xy	i;
-	t_rc	ret;
-	int		index;
-
-	if (angle > 0 && angle < 180)
-		i.y = (int)(floor(data->player.y / CUBE) * (CUBE)) - 1;
-	else
-		i.y = (int)(floor(data->player.y / CUBE) * (CUBE)) + CUBE;
-	i.x = floor(data->player.x + ((data->player.y - i.y) / tan(RAD(angle))));	
-//	i.x = floor(-data->player.x / tan(RAD(angle)));
-	if ((int)floor(i.y / CUBE) < 0 || (int)floor(i.y / CUBE) > data->map.y - 1 
-		|| (int)floor(i.x / CUBE) < 0 || (int)floor(i.x / CUBE) > data->map.x - 1)
-	{
-		ret.len = 999;
-		printf("h y: %d x: %d a: %f i: %d l: %f\n", (int)floor(i.y / (CUBE)),
-			(int)floor(i.x / (CUBE)), angle, 0, ret.len);
-		return (ret);
-	}
-	index = data->map.arr[(int)floor(i.y / (CUBE))][(int)floor(i.x / (CUBE))];
-	while (index == 0)
-	{
-		if (angle > 0 && angle < 180)
-			i.y = i.y + -(CUBE);
-		else
-			i.y = i.y + (CUBE);
-		i.x = i.x - ((CUBE) / tan(RAD(angle)));
-		if ((int)floor(i.y / CUBE) < 0 || (int)floor(i.y / CUBE) > data->map.y - 1
-			|| (int)floor(i.x / CUBE) < 0 || (int)floor(i.x / CUBE) > data->map.x - 1)
-		{
-			ret.len = 999;
-			printf("hh y: %d x: %d a: %f i: %d l: %f\n", (int)floor(i.y / (CUBE)),
-				(int)floor(i.x / (CUBE)), angle, 0, ret.len);
-			return (ret);
-		}
-		index = data->map.arr[(int)floor(i.y / (CUBE))][(int)floor(i.x / (CUBE))];
-	}
-	ret.col = data->map.col[index - 1];
-	ret.len = sqrt(pow(data->player.x - i.x, 2) + pow(data->player.y - i.y, 2)); //cos
-	ret.len = ABS(ret.len);
-//	ret.len = floor(ret.len);
-	ret.len = ret.len * cos(RAD((data->player.a - angle)));
-//	printf("  y: %d x: %d a: %f i: %d l: %f\n", (int)floor(i.y / (CUBE)),
-//		(int)floor(i.x / (CUBE)), data->player.a - angle, ret.col, ret.len);
-	return (ret);
-}
-
-t_rc	ver_len(t_wolf *data, double angle)
-{
-	t_xy	i;
-	t_rc	ret;
-	int		index;
-
-	if (angle < 90 || angle > 180)
-		i.x = (int)(floor(data->player.x / CUBE) * (CUBE)) + CUBE;
-	else
-		i.x = (int)(floor(data->player.x / CUBE) * (CUBE)) - 1;
-	i.y = floor(data->player.y + ((data->player.x - i.x) * tan(RAD(angle))));
-//	i.y = floor(data->player.x * tan(RAD(angle)));
-	if ((int)floor(i.y / CUBE) < 0 || (int)floor(i.y / CUBE) > data->map.y - 1
-		|| (int)floor(i.x / CUBE) < 0 || (int)floor(i.x / CUBE) > data->map.x - 1)
-	{
-		ret.len = 999;
-		printf("v y: %d x: %d a: %f i: %d l: %f\n", (int)floor(i.y / (CUBE)),
-			(int)floor(i.x / (CUBE)), angle, 0, ret.len);
-		return (ret);
-	}
-	index = data->map.arr[(int)floor(i.y / (CUBE))][(int)floor(i.x / (CUBE))];		
-	while (index == 0)
-	{
-		if (angle < 90 || angle > 270)
-			i.x = i.x + (CUBE);
-		else
-			i.x = i.x + -(CUBE);
-		i.y = i.y - ((CUBE) * tan(RAD(angle)));
-		if ((int)floor(i.y / CUBE) < 0 || (int)floor(i.y / CUBE) > data->map.y - 1
-			|| (int)floor(i.x / CUBE) < 0 || (int)floor(i.x / CUBE) > data->map.x - 1)
-		{
-			ret.len = 999;
-			printf("vv y: %d x: %d a: %f i: %d l: %f\n", (int)floor(i.y / (CUBE)),
-				(int)floor(i.x / (CUBE)), angle, 0, ret.len);
-			return (ret);
-		}
-		index = data->map.arr[(int)floor(i.y / (CUBE))][(int)floor(i.x / (CUBE))];
-	}
-	ret.col = data->map.col[index - 1];
-	ret.len = sqrt(pow(data->player.x - i.x, 2) + pow(data->player.y - i.y, 2)); //cos
-	ret.len = ABS(ret.len);
-//	ret.len = floor(ret.len);
-	ret.len = ret.len * cos(RAD((data->player.a - angle)));
-//	printf("v y: %d x: %d a: %f i: %d l: %f\n", (int)floor(i.y / (CUBE)),
-//			(int)floor(i.x / (CUBE)), data->player.a - angle, ret.col, ret.len);
-	return (ret);
-}
-
 void	ray_casting(t_wolf *data)
 {
-	t_rc	slice[2];
-	double 	angle;
-	int		n;
-	int		slice_h;
+    for(int y = 0; y < WIN_W; y++)
+    {
+      //calculate ray position and direction
+   //   double cameraX = 2 * y / (double)WIN_W - 1; //x-coordinate in camera space
+      data->cast.ray.x = PDIR_X + PLANE_X * (2 * y / (double)WIN_W - 1);
+      data->cast.ray.y = PDIR_Y + PLANE_Y * (2 * y / (double)WIN_W - 1);
+      //which box of the map we're in
+      MPX = (int)POX;
+      MPY = (int)POY;
 
-	n = 0;
-	angle = fmod((data->player.a - (PP_ANGLE / 2)) + 360, 360);
-//	angle = data->player.a - (PP_ANGLE / 2);
-	while (n != WIN_W)
-	{
-		slice[0] = hor_len(data, angle);
-		slice[1] = ver_len(data, angle);
-		if (slice[0].len < slice[1].len)
-			ft_memcpy(&data->slice[n], &slice[0], sizeof(t_rc));
-		else
-			ft_memcpy(&data->slice[n], &slice[1], sizeof(t_rc));
-		slice_h = CUBE / data->slice[n].len * data->pp_d;
-		//	slice_h = slice_h - slice_h % 2;
-		data->slice[n].start = (WIN_H - slice_h) / 2;
-		data->slice[n].end = data->slice[n].start + slice_h;
-		angle += (double)PP_ANGLE / WIN_W;
-		angle = fmod(angle + 360, 360);
-	//	printf("                      %f %d %f\n", angle, data->slice[n].col, data->slice[n].len);
-		n++;
+      //length of ray from current position to next x or y-side
+      double sideDistX;
+      double sideDistY;
+
+       //length of ray from one x or y-side to next x or y-side
+      double deltaDistX = ABS(1 / data->cast.ray.x);
+      double deltaDistY = ABS(1 / data->cast.ray.y);
+	  
+
+      //what direction to step in x or y-direction (either +1 or -1)
+     // int stepX;
+     // int stepY;
+
+     // int hit = 0; //was there a wall hit?
+      int side; //was a NS or a EW wall hit?
+      //calculate step and initial sideDist
+	  
+	if (data->cast.ray.x < 0)
+      {
+        data->cast.step.x = -1;
+        sideDistX = (POX - MPX) * deltaDistX;
+      }
+      else
+      {
+        data->cast.step.x = 1;
+        sideDistX = (MPX + 1.0 - POX) * deltaDistX;
+      }
+      if (data->cast.ray.y < 0)
+      {
+        data->cast.step.y = -1;
+        sideDistY = (POY - MPY) * deltaDistY;
+      }
+      else
+      {
+        data->cast.step.y = 1;
+        sideDistY = (MPY + 1.0 - POY) * deltaDistY;
+      }
+      while (1)
+      {
+        if (sideDistX < sideDistY)
+        {
+          sideDistX += deltaDistX;
+          MPX += data->cast.step.x;
+          side = 0;
+        }
+        else
+        {
+          sideDistY += deltaDistY;
+          MPY += data->cast.step.y;
+          side = 1;
+        }
+        if (data->map.arr[MPX][MPY] > 0)
+			break ;
+      }
+      //Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
+      double perpWallDist;
+	  if (side == 0)
+		  perpWallDist = (MPX - POX + (1 - data->cast.step.x) / 2) / data->cast.ray.x;
+      else
+		  perpWallDist = (MPY - POY + (1 - data->cast.step.y) / 2) / data->cast.ray.y;
+
+	  data->slice[y].start = -(int)(WIN_H / perpWallDist) / 2 + WIN_H / 2; // if <0
+	  data->slice[y].end = (int)(WIN_H / perpWallDist) / 2 + WIN_H / 2; // if > WIN_W
+	  data->slice[y].col = data->map.col[data->map.arr[MPX][MPY] - 1];
+      //give x and y sides different brightness
+	  if (side == 1)
+		  data->slice[y].col = data->slice[y].col / 2;
 	}
 }
-
