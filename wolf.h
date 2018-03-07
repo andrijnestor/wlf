@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:09:15 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/06 21:55:45 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/07 18:31:26 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # define TEX_W 64
 # define TOP_COLOR 0x222222
 # define BOT_COLOR 0x444444
-# define ROT_SPD 0.2
-# define SPD 0.15
+# define ROT_SPD 0.04
+# define SPD 0.065
 //# define PP_ANGLE 60
 //# define CUBE 64
 //# define RAD(x) (x * M_PI / 180.0)
@@ -33,10 +33,20 @@
 # define POY data->player.y
 # define PDIR_X data->player.dir_x
 # define PDIR_Y data->player.dir_y
+# define RDIR_X data->cast.ray.x
+# define RDIR_Y data->cast.ray.y
 # define PLANE_X data->player.plane_x
 # define PLANE_Y data->player.plane_y
 # define MPX data->cast.map.x
 # define MPY data->cast.map.y
+# define W_DIST data->cast.w_dist
+# define LINE_H data->cast.line_h
+# define SIDE data->cast.side
+# define WALL_X data->cast.wall_x
+# define F_WALL_X data->cast.floor_w.x
+# define F_WALL_Y data->cast.floor_w.y
+# define PXL *(int *)(data->walls.addr + ((int)((y + x * WIN_W)) * sizeof(int)))
+//# define PXT *(int *)(data->walls.addr + ((int)((y + ((WIN_H - x) * WIN_W))) * sizeof(int)))
 
 typedef struct	s_xy
 {
@@ -64,6 +74,14 @@ typedef struct	s_cast
 	t_dxy		ray;
 	t_dxy		d_dist;
 	t_dxy		s_dist;
+	double		w_dist;
+	int			side;
+	int			line_h;
+	double		wall_x;
+	t_dxy		floor_w;
+//	double		dist_w;
+	double		dist_plr;
+//	double		dist_cur;
 }				t_cast;
 
 typedef struct	s_plr
@@ -74,7 +92,6 @@ typedef struct	s_plr
 	double		dir_y;
 	double		plane_x;
 	double		plane_y;
-//	double		a; ///
 	double		rot;
 	double		spd;
 }				t_plr;
@@ -92,11 +109,21 @@ typedef struct	s_map
 {
 	int			**arr;
 	int			***tex;
+	int			**f_tex;
+	int			**t_tex;
 	int			tex_n;
 	int			tex_x;
 	int			x;
 	int			y;
 }				t_map;
+
+typedef struct	s_key
+{
+	int			up;
+	int			down;
+	int			left;
+	int			right;
+}				t_key;
 
 typedef struct	s_wolf
 {
@@ -108,9 +135,7 @@ typedef struct	s_wolf
 	t_plr		player;
 	t_cast		cast;
 	t_rc		slice[WIN_W];
-//	int			*texture[TEX_H][TEX_W];
-//	double		pp_a; /// 
-//	int			pp_d; /// 
+	t_key		key;
 }				t_wolf;
 
 int				wf_exit(void *msg);
@@ -118,11 +143,19 @@ int				wf_exit(void *msg);
 int				read_file(t_wolf *data, char *file);
 
 void			ray_casting(t_wolf *data);
+void			floor_casting(t_wolf *data, int y);
+void			put_pixels(t_wolf *data, int y);
 
-void			put_back_img(t_wolf *data);
+//void			put_back_img(t_wolf *data);
 
-void			put_walls_img(t_wolf *data);
+//void			put_walls_img(t_wolf *data);
 
-int				key_hooks(int keycode, t_wolf *data);
+int				loop_hook(t_wolf *data);
+int				key_press_hooks(int keycode, t_wolf *data);
+int				key_release_hooks(int keycode, t_wolf *data);
+void			key_left(t_wolf *data);
+void			key_right(t_wolf *data);
+void			key_down(t_wolf *data);
+void			key_up(t_wolf *data);
 
 #endif
