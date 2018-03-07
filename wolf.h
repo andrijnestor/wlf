@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:09:15 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/07 18:31:26 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/07 21:06:39 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define F_WALL_X data->cast.floor_w.x
 # define F_WALL_Y data->cast.floor_w.y
 # define PXL *(int *)(data->walls.addr + ((int)((y + x * WIN_W)) * sizeof(int)))
-//# define PXT *(int *)(data->walls.addr + ((int)((y + ((WIN_H - x) * WIN_W))) * sizeof(int)))
+# define PUT_IG(x, y, z) mlx_put_image_to_window(data->mlx, data->win, x, y, z)
 
 typedef struct	s_xy
 {
@@ -125,6 +125,20 @@ typedef struct	s_key
 	int			right;
 }				t_key;
 
+typedef struct s_menu
+{
+	int			lvl;
+	int			menu_lvl;
+	t_img		back;
+	t_img		new_game;
+	t_img		resume;
+	t_img		lvl1;
+	t_img		lvl2;
+	t_img		exit;
+	t_img		point;
+	int			p_y;
+}				t_menu;
+
 typedef struct	s_wolf
 {
 	void		*mlx;
@@ -136,6 +150,9 @@ typedef struct	s_wolf
 	t_cast		cast;
 	t_rc		slice[WIN_W];
 	t_key		key;
+	t_menu		*menu;
+	int			maps;
+	void		**file;
 }				t_wolf;
 
 int				wf_exit(void *msg);
@@ -149,6 +166,11 @@ void			put_pixels(t_wolf *data, int y);
 //void			put_back_img(t_wolf *data);
 
 //void			put_walls_img(t_wolf *data);
+
+void			menu_init(t_wolf *data);
+void			menu_render(t_wolf *data);
+
+void	player_init(t_wolf *data);
 
 int				loop_hook(t_wolf *data);
 int				key_press_hooks(int keycode, t_wolf *data);

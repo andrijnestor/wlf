@@ -6,7 +6,7 @@
 #    By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/09 19:34:27 by anestor           #+#    #+#              #
-#    Updated: 2018/03/07 18:20:42 by anestor          ###   ########.fr        #
+#    Updated: 2018/03/07 19:31:32 by anestor          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC					+= key_hooks.c
 SRC					+= render.c
 SRC					+= move.c
 SRC					+= put_pixels.c
+SRC					+= menu.c
 
 OBJ					= $(patsubst %.c,$(OBJ_DIR)%.o,$(SRC))
 .SILENT:

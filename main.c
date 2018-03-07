@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:11:19 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/07 16:29:55 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/07 19:46:03 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,12 @@ int		main(int argc, char **argv)
 	if ((data = ft_memalloc(sizeof(t_wolf))) == NULL)
 		wf_exit("Out of memory");
 	wolf_init(data);
+	menu_init(data);
 	read_file(data, argv[1]);
 	player_init(data);
 	print_map(data);
 
-//ray_casting(data);
+	ray_casting(data);
 
 //	put_back_img(data);
 	mlx_hook(data->win, 2, 0, key_press_hooks, data); 
