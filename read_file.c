@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:26:58 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/07 19:29:25 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/08 01:00:14 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	**texture_array(char *filename, t_wolf *data)
 	i.x = TEX_W;
 	i.y = TEX_H;
 	tmp.image = mlx_xpm_file_to_image(data->mlx, filename, &i.x, &i.y);
-	mlx_put_image_to_window(data->mlx, data->win, tmp.image, 0, 0);
+//	mlx_put_image_to_window(data->mlx, data->win, tmp.image, 0, 0);
 	tmp.addr = mlx_get_data_addr(tmp.image, &tmp.bpp, &tmp.size_line,
 																&tmp.endian);
 	tmp.bpp /= 8;
@@ -37,6 +37,7 @@ static int	**texture_array(char *filename, t_wolf *data)
 				*(int *)(tmp.addr + ((int)(i.y + i.x * TEX_W)) * sizeof(int));
 		}
 	}
+	mlx_destroy_image(data->mlx, tmp.image);
 	return (img);
 }
 
@@ -60,14 +61,17 @@ static int	read_textures(t_wolf *data, int fd)
 		if (ft_strstr(line, ".xpm"))
 		{
 			col = texture_array(line, data);
-			p.y = -1;
-			while (++p.y != TEX_W)
+			p.y = 0;
+			while (p.y != TEX_W)
 			{
 				data->map.tex[i][p.y] = ft_memalloc(sizeof(int) * TEX_W);
 				p.x = -1;
 				while (++p.x != TEX_H)
 					data->map.tex[i][p.y][p.x] = col[p.y][p.x];
+				ft_memdel((void **)&col[p.y]);
+				p.y++;
 			}
+			ft_memdel((void **)&col);
 		}
 		else
 		{
@@ -84,6 +88,8 @@ static int	read_textures(t_wolf *data, int fd)
 		ft_memdel((void **)&line);
 		i++;
 	}
+	data->map.f_tex = texture_array("textures/floor_1.xpm", data);
+	data->map.c_tex = texture_array("textures/ceil_1.xpm", data);
 	return (0);
 }
 

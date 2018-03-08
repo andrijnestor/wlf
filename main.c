@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:11:19 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/07 19:46:03 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/08 02:01:31 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@ void	wolf_init(t_wolf *data)
 
 void	player_init(t_wolf *data)
 {
+	t_xy	i;
+
+	i.y = WIN_W;
+	i.x = WIN_W;
+	data->player.gun =
+		mlx_xpm_file_to_image(data->mlx, "m_tex/gun.xpm", &i.x, &i.y);
 	data->player.dir_x = 1;
 	data->player.dir_y = 1;
 	data->player.plane_x = -0.66;
@@ -106,8 +112,7 @@ int		main(int argc, char **argv)
 	read_file(data, argv[1]);
 	player_init(data);
 	print_map(data);
-
-	ray_casting(data);
+//	ray_casting(data);
 
 //	put_back_img(data);
 	mlx_hook(data->win, 2, 0, key_press_hooks, data); 

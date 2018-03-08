@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 22:13:30 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/07 21:06:34 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/08 01:34:14 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,22 @@ int		loop_hook(t_wolf *data)
 	mlx_string_put(data->mlx, data->win, 200, 200, 0xAAAAAA, "hi");
 	return (0);
 }
+/*
+int		key_press_hooks(int keycode, t_wolf *data)
+{
+	if (keycode == 123)
+		data->key.right = 1;
+	if (keycode == 124)
+		data->key.left = 1;
+	if (keycode == 125)
+		data->key.down = 1;
+	if (keycode == 126)
+		data->key.up = 1;
+	if (keycode == 53)
+		wf_exit("exit");
+	return(0);
+}
+*/
 
 int		key_press_hooks(int keycode, t_wolf *data)
 {
@@ -83,7 +99,7 @@ int		key_press_hooks(int keycode, t_wolf *data)
 			}
 			else
 			{
-				read_file(data, "test.map");
+				read_file(data, "lvl1.map");
 				player_init(data);
 				data->menu->lvl = 1;
 			}
@@ -92,7 +108,8 @@ int		key_press_hooks(int keycode, t_wolf *data)
 			wf_exit("Exit success");
 		if (data->menu->menu_lvl == 2 && data->menu->p_y == (WIN_H / 20) * 6)
 		{
-				read_file(data, "test.map");
+
+				read_file(data, "lvl1.map");
 				player_init(data);
 				data->menu->lvl = 1;
 		}

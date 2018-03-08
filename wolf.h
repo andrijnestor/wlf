@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:09:15 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/07 21:06:39 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/07 23:58:20 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct	s_cast
 
 typedef struct	s_plr
 {
+	void		*gun;
 	double		x;
 	double		y;
 	double		dir_x;
@@ -110,7 +111,7 @@ typedef struct	s_map
 	int			**arr;
 	int			***tex;
 	int			**f_tex;
-	int			**t_tex;
+	int			**c_tex;
 	int			tex_n;
 	int			tex_x;
 	int			x;

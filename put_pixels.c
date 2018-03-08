@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 18:19:48 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/07 18:24:23 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/07 23:57:02 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ static void	put_floor_top_pxl(t_wolf *data, int y, int x, double weight)
 	cur_floor_y = weight * F_WALL_Y + (1.0 - weight) * POY;
 	floor_t_x = (int)(cur_floor_x * TEX_W) % TEX_W;
 	floor_t_y = (int)(cur_floor_y * TEX_H) % TEX_H;
-	PXL = data->map.tex[0][floor_t_x][floor_t_y];
+	PXL = data->map.f_tex[floor_t_x][floor_t_y];
 	PXL = (PXL >> 1) & 8355711;
 	*(int *)(data->walls.addr + ((int)((y + ((WIN_H - x) *
-		WIN_W))) * sizeof(int))) = data->map.tex[1][floor_t_y][floor_t_x];
+		WIN_W))) * sizeof(int))) = data->map.c_tex[floor_t_y][floor_t_x];
 }
 
 static void	put_wall_pxl(t_wolf *data, int y, int x, int tex_x)
