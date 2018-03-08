@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 16:13:46 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/07 16:14:42 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/08 17:19:15 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,4 @@ void	key_down(t_wolf *data)
 	if (i.y < data->map.y && i.y >= 0 && i.x < data->map.x && i.x >= 0)
 		if (data->map.arr[i.y][i.x] == 0)
 			POX -= PDIR_X * SPD;
-
 }

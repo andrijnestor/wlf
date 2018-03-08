@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 19:37:24 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/07 23:43:41 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/08 17:58:42 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ void		ray_casting(t_wolf *data)
 		LINE_H = (int)(WIN_H / W_DIST);
 		put_pixels(data, y);
 	}
-	mlx_put_image_to_window(data->mlx, data->win, data->walls.image, 0, 0);
-	mlx_put_image_to_window(data->mlx, data->win, data->player.gun, 0, 0);
+	PUT_IG(data->walls.image, 0, 0);
+	PUT_IG(data->player.fire, WIN_W / 2 - 50, data->player.fire_y);
+	PUT_IG(data->player.gun, 0, 0);
 }

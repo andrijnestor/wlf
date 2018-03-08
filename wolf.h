@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:09:15 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/07 23:58:20 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/08 17:58:10 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,12 @@
 # include "libft.h"
 # include <math.h>
 # include <mlx.h>
-# include <stdio.h> // 
 # define WIN_H 800
 # define WIN_W 1200
 # define TEX_H 64
 # define TEX_W 64
-# define TOP_COLOR 0x222222
-# define BOT_COLOR 0x444444
 # define ROT_SPD 0.04
 # define SPD 0.065
-//# define PP_ANGLE 60
-//# define CUBE 64
-//# define RAD(x) (x * M_PI / 180.0)
-//# define DEG(x) (x * 180.0 / M_PI)
 # define ABS(x) (x < 0) ? x * -1 : x
 # define POX data->player.x
 # define POY data->player.y
@@ -47,6 +40,7 @@
 # define F_WALL_Y data->cast.floor_w.y
 # define PXL *(int *)(data->walls.addr + ((int)((y + x * WIN_W)) * sizeof(int)))
 # define PUT_IG(x, y, z) mlx_put_image_to_window(data->mlx, data->win, x, y, z)
+# define F_TO_IMG(x, y, z) mlx_xpm_file_to_image(data->mlx, x, y, z)
 
 typedef struct	s_xy
 {
@@ -79,9 +73,7 @@ typedef struct	s_cast
 	int			line_h;
 	double		wall_x;
 	t_dxy		floor_w;
-//	double		dist_w;
 	double		dist_plr;
-//	double		dist_cur;
 }				t_cast;
 
 typedef struct	s_plr
@@ -95,6 +87,8 @@ typedef struct	s_plr
 	double		plane_y;
 	double		rot;
 	double		spd;
+	void		*fire;
+	int			fire_y;
 }				t_plr;
 
 typedef struct	s_img
@@ -124,19 +118,20 @@ typedef struct	s_key
 	int			down;
 	int			left;
 	int			right;
+	int			space;
 }				t_key;
 
-typedef struct s_menu
+typedef struct	s_menu
 {
 	int			lvl;
 	int			menu_lvl;
-	t_img		back;
-	t_img		new_game;
-	t_img		resume;
-	t_img		lvl1;
-	t_img		lvl2;
-	t_img		exit;
-	t_img		point;
+	void		*back;
+	void		*new_game;
+	void		*resume;
+	void		*lvl1;
+	void		*lvl2;
+	void		*exit;
+	void		*point;
 	int			p_y;
 }				t_menu;
 
@@ -145,7 +140,6 @@ typedef struct	s_wolf
 	void		*mlx;
 	void		*win;
 	t_img		walls;
-	t_img		back;
 	t_map		map;
 	t_plr		player;
 	t_cast		cast;
@@ -153,25 +147,41 @@ typedef struct	s_wolf
 	t_key		key;
 	t_menu		*menu;
 	int			maps;
-	void		**file;
+	char		**file;
 }				t_wolf;
+
+/*
+** exit
+*/
 
 int				wf_exit(void *msg);
 
+/*
+** reading map and textures
+*/
+
 int				read_file(t_wolf *data, char *file);
+int				read_textures(t_wolf *data, int fd);
+
+/*
+** rendering
+*/
 
 void			ray_casting(t_wolf *data);
 void			floor_casting(t_wolf *data, int y);
 void			put_pixels(t_wolf *data, int y);
-
-//void			put_back_img(t_wolf *data);
-
-//void			put_walls_img(t_wolf *data);
-
-void			menu_init(t_wolf *data);
 void			menu_render(t_wolf *data);
 
-void	player_init(t_wolf *data);
+/*
+** init settings
+*/
+
+void			menu_init(t_wolf *data);
+void			player_init(t_wolf *data);
+
+/*
+** keys and hooks
+*/
 
 int				loop_hook(t_wolf *data);
 int				key_press_hooks(int keycode, t_wolf *data);
@@ -180,5 +190,13 @@ void			key_left(t_wolf *data);
 void			key_right(t_wolf *data);
 void			key_down(t_wolf *data);
 void			key_up(t_wolf *data);
+void			point_position_check(t_wolf *data);
+
+/*
+** cleaning
+*/
+
+void			clean_menu_and_mlx(t_wolf *data);
+void			clean_map(t_wolf *data);
 
 #endif

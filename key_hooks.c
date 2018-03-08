@@ -6,145 +6,116 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 22:13:30 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/08 01:34:14 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/08 18:01:53 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-int		loop_hook(t_wolf *data)
+int		menu_lvl_zero(t_wolf *data)
 {
-	if (data->key.right == 1)
-		key_right(data);
-	if (data->key.left == 1)
-		key_left(data);
-	if (data->key.down == 1)
-		key_down(data);
-	if (data->key.up == 1)
-		key_up(data);
-	if (data->menu->lvl == 1)
-		ray_casting(data);
-	else
-		menu_render(data);
-	mlx_string_put(data->mlx, data->win, 200, 200, 0xAAAAAA, "hi");
-	return (0);
-}
-/*
-int		key_press_hooks(int keycode, t_wolf *data)
-{
-	if (keycode == 123)
-		data->key.right = 1;
-	if (keycode == 124)
-		data->key.left = 1;
-	if (keycode == 125)
-		data->key.down = 1;
-	if (keycode == 126)
-		data->key.up = 1;
-	if (keycode == 53)
-		wf_exit("exit");
-	return(0);
-}
-*/
-
-int		key_press_hooks(int keycode, t_wolf *data)
-{
-	printf("k: %d\n", keycode);
-	if (keycode == 123)
-		if (data->menu->lvl != 0)
-			data->key.right = 1;
-	if (keycode == 124)
-		if (data->menu->lvl != 0)
-			data->key.left = 1;
-	if (keycode == 125)
+	if (data->menu->menu_lvl == 0)
 	{
-		if (data->menu->lvl != 0)
-			data->key.down = 1;
-		else
-			data->menu->p_y += (WIN_H / 20) * 3;
-	}
-	if (keycode == 126)
-	{
-		if (data->menu->lvl != 0)
-			data->key.up = 1;
-		else
-			data->menu->p_y -= (WIN_H / 20) * 3;
-	}
-
-	if (data->menu->p_y > (WIN_H / 20) * 9 && data->menu->menu_lvl != 1)
-		data->menu->p_y = (WIN_H / 20) * 6;
-	if (data->menu->p_y > (WIN_H / 20) * 12)
-		data->menu->p_y = (WIN_H / 20) * 6;
-	if (data->menu->p_y < (WIN_H / 20) * 6)
-		data->menu->p_y = (WIN_H / 20) * 9;
-
-	if (keycode == 36)
-	{
-		if (data->menu->menu_lvl == 0 && data->menu->p_y == (WIN_H / 20) * 6)
+		if (data->menu->p_y == (WIN_H / 20) * 6)
 		{
 			if (data->maps == 1)
-				return (data->menu->menu_lvl = 2);
+			{
+				data->menu->menu_lvl = 2;
+				return (1);
+			}
 			else
 				data->menu->lvl = 1;
 		}
-		if (data->menu->menu_lvl == 0 && data->menu->p_y == (WIN_H / 20) * 9)
+		if (data->menu->p_y == (WIN_H / 20) * 9)
 			wf_exit("Exit success");
-		if (data->menu->menu_lvl == 1 && data->menu->p_y == (WIN_H / 20) * 6)
+	}
+	return (0);
+}
+
+int		menu_lvl_one(t_wolf *data)
+{
+	if (data->menu->menu_lvl == 1)
+	{
+		if (data->menu->p_y == (WIN_H / 20) * 6)
 			data->menu->lvl = 1;
-		if (data->menu->menu_lvl == 1 && data->menu->p_y == (WIN_H / 20) * 9)
+		if (data->menu->p_y == (WIN_H / 20) * 9)
 		{
 			if (data->maps == 1)
 			{
 				data->menu->p_y = (WIN_H / 20) * 6;
-				return (data->menu->menu_lvl = 2);
+				data->menu->menu_lvl = 2;
+				return (1);
 			}
 			else
 			{
-				read_file(data, "lvl1.map");
+				clean_map(data);
+				read_file(data, data->file[0]);
 				player_init(data);
 				data->menu->lvl = 1;
 			}
 		}
-		if (data->menu->menu_lvl == 1 && data->menu->p_y == (WIN_H / 20) * 12)
+		if (data->menu->p_y == (WIN_H / 20) * 12)
 			wf_exit("Exit success");
-		if (data->menu->menu_lvl == 2 && data->menu->p_y == (WIN_H / 20) * 6)
-		{
-
-				read_file(data, "lvl1.map");
-				player_init(data);
-				data->menu->lvl = 1;
-		}
-		if (data->menu->menu_lvl == 2 && data->menu->p_y == (WIN_H / 20) * 9)
-		{
-				read_file(data, "test5.map");
-				player_init(data);
-				data->menu->lvl = 1;
-		}
 	}
-	if (keycode == 53)
+	return (0);
+}
+
+int		menu_lvl_three(t_wolf *data)
+{
+	if (data->menu->menu_lvl == 2)
 	{
-		if (data->menu->lvl == 0 && data->menu->menu_lvl != 2)
-			wf_exit("Exit success");
-		if (data->menu->lvl == 0 && data->menu->menu_lvl == 2)
-			data->menu->menu_lvl = 0;
-		else
+		if (data->menu->p_y == (WIN_H / 20) * 6)
 		{
-			data->menu->lvl = !data->menu->lvl;
-			data->menu->menu_lvl = 1;
-			data->menu->p_y = (WIN_H / 20) * 6;
+			clean_map(data);
+			read_file(data, data->file[0]);
+			player_init(data);
+			data->menu->lvl = 1;
+		}
+		if (data->menu->p_y == (WIN_H / 20) * 9)
+		{
+			clean_map(data);
+			read_file(data, data->file[1]);
+			player_init(data);
+			data->menu->lvl = 1;
 		}
 	}
 	return (0);
 }
 
-int		key_release_hooks(int keycode, t_wolf *data)
+void	esc_button(t_wolf *data)
 {
+	if (data->menu->lvl == 0 && data->menu->menu_lvl != 2)
+		wf_exit("Exit success");
+	if (data->menu->lvl == 0 && data->menu->menu_lvl == 2)
+		data->menu->menu_lvl = 0;
+	else
+	{
+		data->menu->lvl = !data->menu->lvl;
+		data->menu->menu_lvl = 1;
+		data->menu->p_y = (WIN_H / 20) * 6;
+	}
+}
+
+int		key_press_hooks(int keycode, t_wolf *data)
+{
+	if (keycode == 49)
+		data->key.space = 1;
 	if (keycode == 123)
-		data->key.right = 0;
+		(data->menu->lvl != 0) ? data->key.right = 1 : 0;
 	if (keycode == 124)
-		data->key.left = 0;
+		(data->menu->lvl != 0) ? data->key.left = 1 : 0;
 	if (keycode == 125)
-		data->key.down = 0;
+		(data->menu->lvl != 0) ? data->key.down = 1 :
+					(data->menu->p_y += (WIN_H / 20) * 3);
 	if (keycode == 126)
-		data->key.up = 0;
+		(data->menu->lvl != 0) ? data->key.up = 1 :
+					(data->menu->p_y -= (WIN_H / 20) * 3);
+	point_position_check(data);
+	if (keycode == 36)
+		if (menu_lvl_zero(data) == 1 || menu_lvl_one(data) == 1 ||
+				menu_lvl_three(data) == 1)
+			return (0);
+	if (keycode == 53)
+		esc_button(data);
 	return (0);
 }
