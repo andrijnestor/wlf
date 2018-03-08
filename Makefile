@@ -6,12 +6,12 @@
 #    By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/09 19:34:27 by anestor           #+#    #+#              #
-#    Updated: 2018/03/08 17:18:09 by anestor          ###   ########.fr        #
+#    Updated: 2018/03/08 18:07:06 by anestor          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME				= wolf3d
-FLAGS				= -Wall -Wextra -Werror -g
+FLAGS				= -Wall -Wextra -Werror
 FWORKS				= -framework OpenGL -framework AppKit
 MLX					= -L/usr/local/lib -lmlx
 OBJ_DIR				= obj/

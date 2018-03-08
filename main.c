@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 14:11:19 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/08 18:03:26 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/08 18:07:59 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int		main(int argc, char **argv)
 	read_file(data, data->file[0]);
 	player_init(data);
 	mlx_hook(data->win, 2, 0, key_press_hooks, data);
-	mlx_hook(data->win, 3, 0, key_release_hooks, data); 
+	mlx_hook(data->win, 3, 0, key_release_hooks, data);
 	mlx_loop_hook(data->mlx, loop_hook, data);
 	mlx_hook(data->win, 17, 1L << 17, wf_exit, "Exit success");
 	mlx_loop(data->mlx);

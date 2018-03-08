@@ -6,7 +6,7 @@
 /*   By: anestor <anestor@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 19:37:24 by anestor           #+#    #+#             */
-/*   Updated: 2018/03/08 17:58:42 by anestor          ###   ########.fr       */
+/*   Updated: 2018/03/08 18:07:52 by anestor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	calc_side_and_mapxy(t_wolf *data)
 	return (side);
 }
 
-void	floor_casting(t_wolf *data, int y)
+void		floor_casting(t_wolf *data, int y)
 {
 	if (SIDE == 0 && RDIR_X > 0)
 	{
